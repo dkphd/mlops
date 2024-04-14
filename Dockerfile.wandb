@@ -1,4 +1,4 @@
 FROM arekcze/test-gpu:latest
 
 COPY . .
-ENTRYPOINT pyhton3 job.py
+ENTRYPOINT python3
