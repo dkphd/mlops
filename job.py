@@ -28,5 +28,7 @@ def run_training_run(epochs, lr):
     run.log_code()
     run.finish()
 
-
-run_training_run(epochs=10, lr=0.01)
+try:
+    run_training_run(epochs=10, lr=0.01)
+except Exception as e:
+    print(e)
