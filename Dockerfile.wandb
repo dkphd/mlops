@@ -11,3 +11,5 @@ COPY --link requirements.txt ./
 RUN pip install -r requirements.txt
 
 COPY --link job.py configs/ ./
+
+ENTRYPOINT python3 job.py
