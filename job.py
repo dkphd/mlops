@@ -6,9 +6,6 @@ config = {"epochs": 100, "w":2, "b":3}
 
 entity = "phd-dk"
 project = "mlops"
-job_name = "test_job"
-
-settings = wandb.Settings(job_name=job_name)
 
 class LinearModel(nn.Module):
     def __init__(self):
@@ -20,7 +17,7 @@ class LinearModel(nn.Module):
     
 
 with wandb.init(
-    entity=entity, config=config, project=project, settings=settings
+    entity=entity, config=config, project=project,
 ) as run:
     config = wandb.config
 
@@ -41,9 +38,7 @@ with wandb.init(
         loss.backward()
         optimizer.step()
         print('epoch {}, loss {}'.format(epoch, loss.item()))
-        wandb.log({"loss": loss, "epoch": epoch})
+        run.log({"loss": loss, "epoch": epoch})
 
     print('w = {}, b = {}'.format(model.linear.weight.item(), model.linear.bias.item()))
     print(f"Should be w = {config.w}, b = {config.b}")
-
-    wandb.run.log_code()
