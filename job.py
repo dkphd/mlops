@@ -1,44 +1,32 @@
-import torch
-import torch.nn as nn
+import random
 import wandb
 
-config = {"epochs": 100, "w":2, "b":3}
 
-entity = "phd-dk"
-project = "mlops"
+def run_training_run(epochs, lr):
+    settings = wandb.Settings(job_source="artifact")
+    run = wandb.init(
+        project="launch_demo",
+        job_type="eval",
+        settings=settings,
+        entity="phd-dk",
+        # Simulate tracking hyperparameters
+        config={
+            "learning_rate": lr,
+            "epochs": epochs,
+        },
+    )
 
-class LinearModel(nn.Module):
-    def __init__(self):
-        super(LinearModel, self).__init__()
-        self.linear = nn.Linear(1, 1)
+    offset = random.random() / 5
+    print(f"lr: {lr}")
 
-    def forward(self, x):
-        return self.linear(x)
-    
+    for epoch in range(2, epochs):
+        # simulating a training run
+        acc = 1 - 2**-epoch - random.random() / epoch - offset
+        loss = 2**-epoch + random.random() / epoch + offset
+        wandb.log({"acc": acc, "loss": loss})
 
-with wandb.init(
-    entity=entity, config=config, project=project,
-) as run:
-    config = wandb.config
+    run.log_code()
+    run.finish()
 
-    x = torch.linspace(-1, 1, 100).view(-1, 1)
-    y = config.w * x + config.b
 
-    model = LinearModel()
-    criterion = nn.MSELoss()
-    optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
-
-    for epoch in range(1, config.epochs):
-        inputs = x
-        target = y
-
-        optimizer.zero_grad()
-        outputs = model(inputs)
-        loss = criterion(outputs, target)
-        loss.backward()
-        optimizer.step()
-        print('epoch {}, loss {}'.format(epoch, loss.item()))
-        run.log({"loss": loss, "epoch": epoch})
-
-    print('w = {}, b = {}'.format(model.linear.weight.item(), model.linear.bias.item()))
-    print(f"Should be w = {config.w}, b = {config.b}")
+run_training_run(epochs=10, lr=0.01)
