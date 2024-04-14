@@ -1,35 +1,8 @@
-import random
 import wandb
-import logging
 
-def run_training_run(epochs, lr):
-    settings = wandb.Settings(job_source="artifact")
-    run = wandb.init(
-        project="launch_demo",
-        job_type="eval",
-        settings=settings,
-        entity="phd-dk",
-        # Simulate tracking hyperparameters
-        config={
-            "learning_rate": lr,
-            "epochs": epochs,
-        },
-    )
+settings = wandb.Settings(disable_git=True)
 
-    offset = random.random() / 5
-    print(f"lr: {lr}")
-
-    for epoch in range(2, epochs):
-        # simulating a training run
-        acc = 1 - 2**-epoch - random.random() / epoch - offset
-        loss = 2**-epoch + random.random() / epoch + offset
-        wandb.log({"acc": acc, "loss": loss})
-
-    run.log_code()
-    run.finish()
-
-try:
-    run_training_run(epochs=10, lr=0.01)
-except Exception as e:
-    print(e)
-    logging.error(e)
+with wandb.init(settings=settings) as run:
+    run.log({"hello": "world"})
+    for i in range(10):
+        run.log({"metric": i})
