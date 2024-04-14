@@ -1,6 +1,6 @@
 import random
 import wandb
-
+import logging
 
 def run_training_run(epochs, lr):
     settings = wandb.Settings(job_source="artifact")
@@ -32,3 +32,4 @@ try:
     run_training_run(epochs=10, lr=0.01)
 except Exception as e:
     print(e)
+    logging.error(e)
