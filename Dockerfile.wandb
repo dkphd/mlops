@@ -8,7 +8,7 @@ WORKDIR /launch
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
-COPY train_challange.py ./
+COPY job.py ./
 
 
 
