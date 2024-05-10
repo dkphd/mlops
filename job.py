@@ -1,14 +1,8 @@
 import wandb
 import torch
-with wandb.init(
-    project="physionet_article",
-    # name=f"resnet18_{'_'.join(new_config.folds_train)}_{train_config.activation}",
-    name="test",
-    entity="phd-dk",
-) as run:
-        
-    
-    
+settings = wandb.Settings(disable_git=True)
+
+with wandb.init(settings=settings) as run:
     run.log({"hello": "world"})
     for i in range(10):
         run.log({"metric": i})
@@ -18,8 +12,3 @@ with wandb.init(
             run.log({"cuda": 1})
         else:
             run.log({"cuda": 0})
-
-
-
-
-    
