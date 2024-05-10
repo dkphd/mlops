@@ -9,8 +9,7 @@ COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
 COPY train_challange.py ./
-COPY ./src ./src
-COPY ./metadata ./metadata
+
 
 
 ENTRYPOINT python3
